@@ -84,7 +84,12 @@ app.get('/health', (req, res) => {
 // API Routes
 app.use('/api', urlRoutes);
 
-// Redirect route (must come after API routes and health checks)
+// Serve static files from React app in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/build')));
+}
+
+// Redirect route (must come after API routes and static files)
 app.get('/:shortCode', async (req, res) => {
   try {
     const { shortCode } = req.params;
@@ -107,10 +112,8 @@ app.get('/:shortCode', async (req, res) => {
   }
 });
 
-// Serve static files from React app in production
+// Catch-all route for React Router in production (must be last)
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../client/build')));
-
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
   });
