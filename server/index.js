@@ -18,8 +18,8 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Health check endpoint (MUST come before /:shortCode route)
-app.get('/healthz', async (req, res) => {
+// API health check endpoint for monitoring (JSON response)
+app.get('/api/health', async (req, res) => {
   const uptime = Math.floor((Date.now() - startTime) / 1000);
   const hours = Math.floor(uptime / 3600);
   const minutes = Math.floor((uptime % 3600) / 60);

@@ -15,7 +15,7 @@ services:
         fromDatabase:
           name: tinylink-db
           property: connectionString
-    healthCheckPath: /healthz
+    healthCheckPath: /api/health
 
 databases:
   - name: tinylink-db

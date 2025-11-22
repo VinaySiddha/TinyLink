@@ -10,7 +10,7 @@ function HealthCheck() {
   useEffect(() => {
     const fetchHealth = async () => {
       try {
-        const response = await fetch('/healthz');
+        const response = await fetch('/api/health');
         const data = await response.json();
         console.log('Health data:', data); // Debug log
         setHealth(data);
