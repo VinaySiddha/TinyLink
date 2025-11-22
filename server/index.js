@@ -90,14 +90,24 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Redirect route (must come after API routes and static files)
-app.get('/:shortCode', async (req, res) => {
+// Exclude React routes like /healthz, /code/
+app.get('/:shortCode', async (req, res, next) => {
+  const { shortCode } = req.params;
+  
+  // Skip if it's a known React route
+  if (shortCode === 'healthz' || shortCode === 'code' || shortCode === 'static') {
+    return next();
+  }
+  
   try {
-    const { shortCode } = req.params;
-    
     // Find URL in database
     const urlData = await dbOperations.findByShortCode(shortCode);
 
     if (!urlData) {
+      // If not found and in production, let React handle it
+      if (process.env.NODE_ENV === 'production') {
+        return next();
+      }
       return res.status(404).json({ error: 'Short URL not found' });
     }
 
