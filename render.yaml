@@ -1,10 +1,10 @@
 services:
-  # Backend API
+  # Backend API with Frontend
   - type: web
     name: tinylink-backend
     env: node
     plan: free
-    buildCommand: npm install
+    buildCommand: npm install && cd client && npm install && npm run build && cd ..
     startCommand: node server/index.js
     envVars:
       - key: NODE_ENV
